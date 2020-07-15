@@ -1,19 +1,26 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useContext } from 'react'
 import Img from 'gatsby-image'
+
+import { CartContext } from '../context/CartContext'
 
 import Layout from '../components/layout'
 import SEO from '../components/seo'
+import Checkout from '../components/Checkout'
 
-import { getCart, addToCart, cartSubtotal, cartTotal } from '../utils/cart'
+import { cartSubtotal, cartTotal } from '../utils/cart'
 import { formatPrice } from '../utils/format'
 
 export default () => {
-    const cart = getCart()
-    const [shipping, setShipping] = useState(0)
-    const [inputShipping, setInputShipping] = useState(0)
+    const {cart, addToCart} = useContext(CartContext)
+    console.log('Cart.render context,', cart)
+
     const [, updateState] = useState()
     const forceUpdate = useCallback(() => updateState({}), [])
 
+    const [showCheckout, setShowCheckout] = useState(false)
+
+    const [shipping, setShipping] = useState(0)
+    const [inputShipping, setInputShipping] = useState(0)
     const transferShipping = () => {
         setShipping(inputShipping)
     }
@@ -66,16 +73,30 @@ export default () => {
             </table>
             <h3>Subtotal: {formatPrice(cartSubtotal(cart))} </h3>
             <div>
-                <h4>Shipping:
+                <h4>Shipping: $
                  <input
                         type="number"
                         value={inputShipping}
                         onChange={(event) => setInputShipping(event.target.value)}
+                        style={{ marginLeft: '0px', marginRight: '0px', width: '150px' }}
                     />
-                    <button onClick={transferShipping}>+ shipping</button>
+                    <button onClick={transferShipping}>+ shipping </button>
                 </h4>
             </div>
             <h3>Total: {formatPrice(cartTotal(cart, shipping))} </h3>
+
+            <div>
+                {cart && cart.length > 0 &&
+                    <button onClick={() => setShowCheckout(true)} style={{ fontSize: '24px', padding: '12px 24px' }} >
+                        Initiate Checkout
+                    </button>
+                }
+            </div>
+
+            {showCheckout &&
+                <Checkout cart={cart} />
+            }
+
         </Layout>
     )
 }
