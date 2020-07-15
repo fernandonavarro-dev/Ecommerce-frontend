@@ -1,3 +1,5 @@
+export const TAX_RATE = process.env.TAX_RATE || 0
+
 export const setCart = (cart) => {
     localStorage.setItem('cart', JSON.stringify(cart))
 }
@@ -37,4 +39,18 @@ export const addToCart = (product, qty = 1) => {
     }
 
     setCart(cart)
+}
+
+export const cartSubtotal = (cart) => {
+    const subtotal = cart.reduce((counter, product) => {
+        return counter + product.price_in_cent * product.qty
+    }, 0)
+    return subtotal
+}
+
+export const cartTotal = (cart, shipping) => {
+    const subtotal = cartSubtotal(cart)
+    const total = subtotal + subtotal * TAX_RATE + shipping * 100
+
+    return Math.round(total)
 }
