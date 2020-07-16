@@ -25,6 +25,9 @@ export default () => {
         setShipping(inputShipping)
     }
 
+    const subtotal = cartSubtotal(cart)
+    const total = cartTotal(cart, shipping)
+
     return (
         <Layout>
             <SEO title='cart' />
@@ -71,7 +74,7 @@ export default () => {
 
                 </tbody>
             </table>
-            <h3>Subtotal: {formatPrice(cartSubtotal(cart))} </h3>
+            <h3>Subtotal: {formatPrice(subtotal)} </h3>
             <div>
                 <h4>Shipping: $
                  <input
@@ -83,7 +86,7 @@ export default () => {
                     <button onClick={transferShipping}>+ shipping </button>
                 </h4>
             </div>
-            <h3>Total: {formatPrice(cartTotal(cart, shipping))} </h3>
+            <h3>Total: {formatPrice(total)} </h3>
 
             <div>
                 {cart && cart.length > 0 &&
@@ -95,8 +98,8 @@ export default () => {
 
             {showCheckout &&
                 <CheckoutForm
-                    // total={total}
-                    // subtotal={subtotal}
+                    total={total}
+                    subtotal={subtotal}
                     shipping={shipping}
                 />
             }

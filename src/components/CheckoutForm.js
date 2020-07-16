@@ -33,7 +33,9 @@ export default (props) => {
     const [seller, setSeller] = useState('')
     const [coordinator, setCoordinator] = useState('')
     const [shipping, setShipping] = useState(props.shipping)
-    const [invoice, setInvoice] = useState('no')
+    const [invoice, setInvoice] = useState(false)
+    const subtotal = props.subtotal
+    const total = props.total
 
     const valid = () => {
         if (plaza === 'select' || !clientName || !clientTel || !clientAddress || (!colony && !zip) || (!seller && !coordinator)) {
@@ -57,7 +59,9 @@ export default (props) => {
             zip,
             seller,
             coordinator,
+            subtotal_in_cents: subtotal,
             shipping,
+            total_in_cents: total,
             invoice,
             cart
         }
@@ -138,7 +142,7 @@ export default (props) => {
                 <span>Invoice?</span>
                 <select onChange={(e) => setInvoice(e.target.value)} name="invoice" value={invoice}>
                     <option value={true}>Yes</option>
-                    <option value={false}>no</option>
+                    <option value={false}>No</option>
                 </select>
             </div>
 
