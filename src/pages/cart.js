@@ -5,13 +5,13 @@ import { CartContext } from '../context/CartContext'
 
 import Layout from '../components/layout'
 import SEO from '../components/seo'
-import Checkout from '../components/Checkout'
+import CheckoutForm from '../components/CheckoutForm'
 
 import { cartSubtotal, cartTotal } from '../utils/cart'
 import { formatPrice } from '../utils/format'
 
 export default () => {
-    const {cart, addToCart} = useContext(CartContext)
+    const { cart, addToCart } = useContext(CartContext)
     console.log('Cart.render context,', cart)
 
     const [, updateState] = useState()
@@ -94,7 +94,11 @@ export default () => {
             </div>
 
             {showCheckout &&
-                <Checkout cart={cart} />
+                <CheckoutForm
+                    // total={total}
+                    // subtotal={subtotal}
+                    shipping={shipping}
+                />
             }
 
         </Layout>
