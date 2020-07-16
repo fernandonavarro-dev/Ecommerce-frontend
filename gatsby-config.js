@@ -1,16 +1,16 @@
 module.exports = {
   siteMetadata: {
-    title: `Ecommerce Gatsby App`,
+    title: `Wellstar App`,
     description: `Ecommerce site to serve as building blocks for ongoing projects.`,
     author: `@fernandoNDev`,
   },
   plugins: [
     {
-      resolve: `gatsby-source-strapi`,
+      resolve: 'gatsby-source-strapi',
       options: {
-        apiURL: `http://localhost:1337`,
-        queryLimit: 1000, // Default to 100
-        contentTypes: [`product`],
+        apiURL: process.env.API_URL || 'http://localhost:1337',
+        queryLimit: 10000,
+        contentTypes: ['product'],//Which content types we want
         //If using single types place them in this array.
         // loginData: {
         //   identifier: "",

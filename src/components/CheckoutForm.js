@@ -1,10 +1,13 @@
 import React, { useContext, useState } from 'react'
 // import { useContext, useEffect, useState } from 'react'
 import { CartContext } from '../context/CartContext'
+import { API_URL } from '../utils/url'
+// import axios from 'axios'
+
 
 const generateInput = (label, value, setOnChange) => {
     return (
-        <div>
+        <div style={{ margin: '5px' }} >
             <label htmlFor={label}>{label}</label>
             <input style={{ marginLeft: '9px' }}
                 id={label}
@@ -23,6 +26,7 @@ export default (props) => {
 
     const [plaza, setPlaza] = useState('select')
     const [clientName, setClientName] = useState('')
+    const [clientTel, setClientTel] = useState('###-###-####')
     const [clientAddress, setClientAddress] = useState('')
     const [colony, setColony] = useState('')
     const [zip, setZip] = useState('')
@@ -31,10 +35,54 @@ export default (props) => {
     const [shipping, setShipping] = useState(props.shipping)
     const [invoice, setInvoice] = useState('no')
 
-    const handleSubmit = (event) => {
+    const valid = () => {
+        if (plaza === 'select' || !clientName || !clientTel || !clientAddress || (!colony && !zip) || (!seller && !coordinator)) {
+            return false
+        }
+
+        return true
+    }
+
+    const handleSubmit = async (event) => {
         event.preventDefault()
-        console.log("handleSubmit(event),", event);
-        console.log("handleSubmit(), cart", cart);
+        console.log("handleSubmit(event),", event)
+        console.log("handleSubmit(), cart", cart)
+
+        const data = {
+            plaza,
+            clientName,
+            clientTel,
+            clientAddress,
+            colony,
+            zip,
+            seller,
+            coordinator,
+            shipping,
+            invoice,
+            cart
+        }
+
+        console.log("data object to be sent,", data)
+
+
+        const response = await fetch(`${API_URL}/orders`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        // const response = await axios({
+        //     method: 'POST',
+        //     url: 'http://localhost:1337/orders',
+        //     data
+        // })
+
+        const order = await response.json()
+
+        console.log('handleSubmit, response', response)
+        console.log('handleSubmit, order', order)
+
 
     }
 
@@ -64,10 +112,10 @@ export default (props) => {
     // if (token) {
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form style={{ margin: '10px 10px' }} onSubmit={handleSubmit}>
             <div>
-                <span>Plaza</span>
-                <select onChange={() => setPlaza({ plaza })} name="plaza" value={plaza}>
+                <span>Plaza </span>
+                <select onChange={(e) => setPlaza(e.target.value)} name="plaza" value={plaza}>
                     <option value='select'>select</option>
                     <option value='cdmx'>CDMX</option>
                     <option value='edomex'>EDOMEX</option>
@@ -79,21 +127,30 @@ export default (props) => {
                 </select>
             </div>
             {generateInput("Client Name", clientName, setClientName)}
+            {generateInput("Client Tel", clientTel, setClientTel)}
             {generateInput("Client Address", clientAddress, setClientAddress)}
             {generateInput("Colony", colony, setColony)}
             {generateInput("Zip", zip, setZip)}
             {generateInput("Seller", seller, setSeller)}
             {generateInput("Coordinator", coordinator, setCoordinator)}
-            {generateInput("Shipping", shipping, setShipping)}
+            {generateInput("Shipping: $", shipping, setShipping)}
             <div>
                 <span>Invoice?</span>
-                <select onChange={() => setInvoice({ invoice })} name="invoice" value={invoice}>
-                    <option value='yes'>Yes</option>
-                    <option value='no'>no</option>
+                <select onChange={(e) => setInvoice(e.target.value)} name="invoice" value={invoice}>
+                    <option value={true}>Yes</option>
+                    <option value={false}>no</option>
                 </select>
             </div>
 
-            <button onClick={handleSubmit} >Submit</button>
+            <div>
+                <button
+                    onClick={handleSubmit}
+                    style={{ fontSize: '20px', padding: '8px 12px', margin: '10px 10px' }}
+                    disabled={!valid()}
+                >Submit
+                </button>
+
+            </div>
         </form>
 
     )

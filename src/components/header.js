@@ -48,8 +48,8 @@ const Header = ({ siteTitle }) => {
                     position: 'relative'
                   }}
                 >
-                  🛒
-                    <span style={{
+                  <span>🛒</span>
+                  <span style={{
                     width: '20px',
                     height: '20px',
                     borderRadius: '20px',
