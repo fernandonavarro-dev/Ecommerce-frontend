@@ -8,7 +8,7 @@ module.exports = {
     {
       resolve: 'gatsby-source-strapi',
       options: {
-        apiURL: process.env.API_URL || 'https://wellstar-backend-gatsby.herokuapp.com/',
+        apiURL: process.env.API_URL || 'https://wellstar-backend-gatsby.herokuapp.com',
         queryLimit: 10000,
         contentTypes: ['product'],//Which content types we want
         //If using single types place them in this array.
