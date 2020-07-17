@@ -20,7 +20,7 @@ const generateInput = (label, value, setOnChange) => {
 
 export default (props) => {
 
-    const { cart } = useContext(CartContext)
+    const { cart, clearCart } = useContext(CartContext)
     // const [token, setToken] = useState(null)
     // const [total, setTotal] = useState('loading')
 
@@ -36,6 +36,8 @@ export default (props) => {
     const [invoice, setInvoice] = useState(false)
     const subtotal = props.subtotal
     const total = props.total
+
+    const [success, setSuccess] = useState(null)
 
     const valid = () => {
         if (plaza === 'select' || !clientName || !clientTel || !clientAddress || (!colony && !zip) || (!seller && !coordinator)) {
@@ -87,7 +89,9 @@ export default (props) => {
         console.log('handleSubmit, response', response)
         console.log('handleSubmit, order', order)
 
+        setSuccess(true)
 
+        clearCart()
     }
 
     // useEffect(() => {
@@ -116,46 +120,53 @@ export default (props) => {
     // if (token) {
 
     return (
-        <form style={{ margin: '10px 10px' }} onSubmit={handleSubmit}>
-            <div>
-                <span>Plaza </span>
-                <select onChange={(e) => setPlaza(e.target.value)} name="plaza" value={plaza}>
-                    <option value='select'>select</option>
-                    <option value='cdmx'>CDMX</option>
-                    <option value='edomex'>EDOMEX</option>
-                    <option value='monterrey'>Monterrey</option>
-                    <option value='puebla'>Puebla</option>
-                    <option value='queretaro'>Queretaro</option>
-                    <option value='Cancun'>Cancun</option>
-                    <option value='playa-tulum'>Playa/Tulum</option>
-                </select>
-            </div>
-            {generateInput("Client Name", clientName, setClientName)}
-            {generateInput("Client Tel", clientTel, setClientTel)}
-            {generateInput("Client Address", clientAddress, setClientAddress)}
-            {generateInput("Colony", colony, setColony)}
-            {generateInput("Zip", zip, setZip)}
-            {generateInput("Seller", seller, setSeller)}
-            {generateInput("Coordinator", coordinator, setCoordinator)}
-            {generateInput("Shipping: $", shipping, setShipping)}
-            <div>
-                <span>Invoice?</span>
-                <select onChange={(e) => setInvoice(e.target.value)} name="invoice" value={invoice}>
-                    <option value={true}>Yes</option>
-                    <option value={false}>No</option>
-                </select>
-            </div>
+        <div>
+            {!success &&
+                <form style={{ margin: '10px 10px' }} onSubmit={handleSubmit}>
+                    <div>
+                        <span>Plaza </span>
+                        <select onChange={(e) => setPlaza(e.target.value)} name="plaza" value={plaza}>
+                            <option value='select'>select</option>
+                            <option value='cdmx'>CDMX</option>
+                            <option value='edomex'>EDOMEX</option>
+                            <option value='monterrey'>Monterrey</option>
+                            <option value='puebla'>Puebla</option>
+                            <option value='queretaro'>Queretaro</option>
+                            <option value='Cancun'>Cancun</option>
+                            <option value='playa-tulum'>Playa/Tulum</option>
+                        </select>
+                    </div>
+                    {generateInput("Client Name", clientName, setClientName)}
+                    {generateInput("Client Tel", clientTel, setClientTel)}
+                    {generateInput("Client Address", clientAddress, setClientAddress)}
+                    {generateInput("Colony", colony, setColony)}
+                    {generateInput("Zip", zip, setZip)}
+                    {generateInput("Seller", seller, setSeller)}
+                    {generateInput("Coordinator", coordinator, setCoordinator)}
+                    {generateInput("Shipping: $", shipping, setShipping)}
+                    <div>
+                        <span>Invoice?</span>
+                        <select onChange={(e) => setInvoice(e.target.value)} name="invoice" value={invoice}>
+                            <option value={true}>Yes</option>
+                            <option value={false}>No</option>
+                        </select>
+                    </div>
 
-            <div>
-                <button
-                    onClick={handleSubmit}
-                    style={{ fontSize: '20px', padding: '8px 12px', margin: '10px 10px' }}
-                    disabled={!valid()}
-                >Submit
+                    <div>
+                        <button
+                            onClick={handleSubmit}
+                            style={{ fontSize: '20px', padding: '8px 12px', margin: '10px 10px' }}
+                            disabled={!valid()}
+                        >Submit
                 </button>
 
-            </div>
-        </form>
+                    </div>
+                </form>
+            }
+            {success &&
+                <h2>The order was processed successfully</h2>
+            }
+        </div>
 
     )
 

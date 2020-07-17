@@ -26,6 +26,9 @@ export const cartSubtotal = (cart) => {
 }
 
 export const cartTotal = (cart, shipping) => {
+    if (cart.length === 0) {
+        return 0
+    }
     const subtotal = cartSubtotal(cart)
     const total = subtotal + subtotal * TAX_RATE + shipping * 100
 
