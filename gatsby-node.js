@@ -28,7 +28,7 @@ exports.createPages = ({ actions, graphql }) => {
                 edges {
                     node {
                         id
-                        slug
+                        slugProduct
                     }
                 }
             }
@@ -36,7 +36,7 @@ exports.createPages = ({ actions, graphql }) => {
     `).then(result => {
         result.data.allStrapiProduct.edges.forEach(({ node }) => {
             createPage({
-                path: `/products/${node.slug}`,
+                path: `/products/${node.slugProduct}`,
                 component: path.resolve(`src/templates/product.js`),
                 context: {
                     id: node.id
