@@ -9,6 +9,7 @@ import Layout from '../components/layout'
 
 import { formatPrice } from '../utils/format'
 
+
 const ProductTemplate = ({ data }) => {
 
     const [qty, setQty] = useState(1)
